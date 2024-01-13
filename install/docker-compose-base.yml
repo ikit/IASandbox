@@ -1,0 +1,44 @@
+version: "3.5"
+
+networks:
+  iasandbox_net:
+    name: iasandbox_net
+
+services:
+  iasandbox_chroma:
+    container_name: iasandbox_chroma
+    image: chromadb/chroma
+    volumes:
+      - /var/iasandbox/chroma:/chroma/chroma
+    restart: always
+    networks:
+      - iasandbox_net
+    ports:
+      - 7000:8000
+
+  iasandbox_ollama:
+    container_name: iasandbox_ollama
+    image: ollama/ollama
+    restart: always
+    networks:
+      - iasandbox_net
+    ports:
+      - "7001:11434"
+
+  iasandbox_core:
+    container_name: iasandbox_core
+    image: iasandbox-core-image
+    restart: always
+    volumes:
+      - /var/iasandbox/files:/var/absg5/files
+    depends_on:
+      - iasandbox_ollama
+      - iasandbox_chroma
+    environment:
+      - NODE_ENV=production
+      - API_PORT=5010
+      - PATH_FILES=/var/iasandbox/files
+    networks:
+      - iasandbox_net
+    ports:
+      - "7010:5010"
