@@ -30,7 +30,7 @@ services:
     image: iasandbox-core-image
     restart: always
     volumes:
-      - /var/iasandbox/files:/var/absg5/files
+      - /var/iasandbox/files:/var/iasandbox/files
     depends_on:
       - iasandbox_ollama
       - iasandbox_chroma
