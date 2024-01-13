@@ -24,8 +24,8 @@ service nginx restart iasandbox-ihm-image
 
 # Deploy the application
 cd /home/olivier/git/IASandbox/install
-docker-compose -f docker-compose-prod.yml down --remove-orphans
-docker-compose -f docker-compose-prod.yml up -d
+docker-compose -f docker-compose-prod.yml -p iasandbox down --remove-orphans
+docker-compose -f docker-compose-prod.yml -p iasandbox up -d 
 
 # Restore service access & display application
 ln -s /etc/nginx/sites-available/iasandbox_prod /etc/nginx/sites-enabled/iasandbox_prod

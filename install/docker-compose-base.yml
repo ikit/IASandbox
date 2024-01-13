@@ -27,8 +27,8 @@ services:
     ports:
       - "7001:11434"
 
-  iasandbox_core:
-    container_name: iasandbox_core
+  iasandbox_api:
+    container_name: iasandbox_api
     image: iasandbox-api-image
     restart: always
     volumes:
