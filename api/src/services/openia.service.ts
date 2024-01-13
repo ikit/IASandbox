@@ -78,7 +78,7 @@ export class OpenAIService {
         Logger.log(" > Retriever d'OpenIA");
         const vectorStore = await Chroma.fromExistingCollection(
             new OpenAIEmbeddings({ openAIApiKey: process.env.OAIK }),
-            { collectionName: chromaDb.name },
+            { collectionName: chromaDb.name, url: process.env.CHROMADB_PATH },
         );
         // Logger.log("\n\n====\n\n", vectorStore.similaritySearch("Abeille", 2), "\n\n")
     
