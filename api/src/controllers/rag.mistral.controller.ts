@@ -1,21 +1,17 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { OpenAIService } from 'src/services/openia.service';
+import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
+import { Mistral7BService } from 'src/services/mistral.service';
 import * as fs from "fs";
 import * as path from "path";
 import { encycloToCsv, getEncycloFromCsv, getZeldaEncyclopedia } from 'src/tools/rag-embedding-pzelda';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { RagWikiData } from 'src/models/rag-wiki-data.model';
 
-@Controller("/api/rag")
-export class RagController {
-  constructor(private readonly openaiService: OpenAIService) {}
+@Controller("/api/rag/mistral")
+export class RagMistralController {
+  constructor(private readonly mistralService: Mistral7BService) {}
 
-  //
-  // Open AI
-  //
-
-  @Get("/openai/init-pzelda")
-  async initOpenAIpzelda() {
+  @Get("/init-pzelda")
+  async initMistralPzelda() {
     // Si le csv pZelda est là, on l'utilise, sinon on le construit à partir du site en ligne
     const pZeldaFile = path.join(process.env.FILES_PATH, "pzelda.csv");
     let ragData: RagWikiData[] = [];
@@ -30,13 +26,13 @@ export class RagController {
     }
     
     Logger.log("Création de la base de donnée vectorielle ChromaDB");
-    const chromaDb = await this.openaiService.embeddingRagData("pzelda", ragData, true);
+    const chromaDb = await this.mistralService.embeddingRagData("pzelda", ragData, true);
 
     return `Base ChromaDB 'pzelda' créée (${await chromaDb.count()} entrées)`;
   }
 
-  @Post("/openai/chat-pzelda")
-  async askOpenAiZeldaChat(@Body() body: { question: string, prompt: string }) {
+  @Post("/chat-pzelda")
+  async askMistralZeldaChat(@Body() body: { question: string, prompt: string }) {
     Logger.log("askOpenAiZeldaChat: " + body.question);
 
     // 1: get chroma DB
@@ -45,14 +41,13 @@ export class RagController {
       throw new Error("La base 'pzelda' n'a pas été initialisée.")
     }
     const ragData = getEncycloFromCsv(pZeldaFile);
-    const chromaDb = await this.openaiService.embeddingRagData("pzelda", ragData);
+    const chromaDb = await this.mistralService.embeddingRagData("pzelda", ragData);
 
     // 2: get retriever
-    const pzeldaRetriever = await this.openaiService.getRetriever(chromaDb);
+    const pzeldaRetriever = await this.mistralService.getRetriever(chromaDb);
 
     // 3: init chat bot, prompt and context
-    const pzeldaChat = await this.openaiService.getChatBot(pzeldaRetriever, body.prompt);
-
+    const pzeldaChat = await this.mistralService.getChatBot(pzeldaRetriever, body.prompt);
 
     // 4: ask chat
     const start = new Date().getTime();
