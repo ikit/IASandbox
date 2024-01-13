@@ -12,7 +12,7 @@ WORKDIR /app
 USER node
 
 COPY --chown=node:node --from=build  ./app/dist ./dist
-COPY --chown=node:node package*.json ./
+COPY --chown=node:node package*.json tsconfig.json ./
 
 RUN node --version
 RUN npm install --production

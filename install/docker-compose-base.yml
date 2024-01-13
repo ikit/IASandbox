@@ -8,18 +8,20 @@ services:
   iasandbox_chroma:
     container_name: iasandbox_chroma
     image: chromadb/chroma
+    restart: always
     volumes:
       - /var/iasandbox/chroma:/chroma/chroma
-    restart: always
     networks:
       - iasandbox_net
     ports:
-      - 7000:8000
+      - "7000:8000"
 
   iasandbox_ollama:
     container_name: iasandbox_ollama
     image: ollama/ollama
     restart: always
+    volumes:
+      - /var/iasandbox/ollama:/root/.ollama
     networks:
       - iasandbox_net
     ports:
@@ -27,7 +29,7 @@ services:
 
   iasandbox_core:
     container_name: iasandbox_core
-    image: iasandbox-core-image
+    image: iasandbox-api-image
     restart: always
     volumes:
       - /var/iasandbox/files:/var/iasandbox/files
@@ -35,9 +37,11 @@ services:
       - iasandbox_ollama
       - iasandbox_chroma
     environment:
-      - NODE_ENV=production
       - API_PORT=5010
-      - PATH_FILES=/var/iasandbox/files
+      - FILES_PATH=
+      - CHROMADB_PATH=
+      - OLLAMA_PATH=
+      - OAIK=
     networks:
       - iasandbox_net
     ports:
