@@ -20,7 +20,7 @@ export class OpenAIService {
      */
     async embeddingRagData(chromaDbName: string, ragData: RagWikiData[], forceDbCreation=false): Promise<Collection> {
         const dbName = `OpenAI-${chromaDbName}`;
-        Logger.log("getOrCreateChromaDb: " + dbName);
+        Logger.log(`ChromaDb path: ${process.env.CHROMADB_PATH}, dbname: ${dbName}`);
         
         // On crée le client vers la base de données vectorielle
         const client = new ChromaClient({ path: process.env.CHROMADB_PATH });
