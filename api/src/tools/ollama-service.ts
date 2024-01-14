@@ -72,7 +72,8 @@ export class OllamaService {
             for (let docIdx=61; docIdx<ragData.length; docIdx+=1) {
                 count += 1;
                 const doc = ragData[docIdx];
-                process.stdout.write(`\rEmbedding document: ${count}/${ragData.length}`);
+                Logger.log(` > embedding document: ${count}/${ragData.length}`);
+                //process.stdout.write(`\rEmbedding document: ${count}/${ragData.length}`);
                 await collection.add({
                     ids: doc.name,
                     metadatas: { source: `${doc.name}: ${doc.url}`},
