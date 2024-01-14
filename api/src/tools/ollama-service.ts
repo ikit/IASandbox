@@ -106,7 +106,10 @@ export class OllamaService {
     
         Logger.log(" > Retriever d'OpenIA");
         const vectorStore = await Chroma.fromExistingCollection(
-            new OllamaEmbeddings({ model: this.llm, baseUrl: process.env.OLLAMA_PATH }),
+            new OllamaEmbeddings({ 
+                model: this.llm, 
+                baseUrl: process.env.OLLAMA_PATH 
+            }),
             { collectionName: chromaDb.name, url: process.env.CHROMADB_PATH },
         );
         // Logger.log("\n\n====\n\n", vectorStore.similaritySearch("Abeille", 2), "\n\n")
@@ -117,7 +120,10 @@ export class OllamaService {
     async getChatBot(retriever: VectorStoreRetriever, prompt: string = null): Promise<RetrievalQAChain> {
         Logger.log("Création du ChatBot")
         Logger.log(" > Récupération du LLM Chat GPT")
-        const llm = new ChatOllama({ baseUrl: process.env.CHROMADB_PATH });
+        const llm = new ChatOllama({ 
+            model: this.llm, 
+            baseUrl: process.env.OLLAMA_PATH 
+        });
     
         // On crée le template du prompt chatBot pour conditionner l'IA et lui donner le context "data" pour répondre les questions de l'utilisateur
         Logger.log(" > Création du prompt");
@@ -126,6 +132,7 @@ export class OllamaService {
         const template = `${iaPrompt}
         Contexte : {context}
         Question : {question}`;
+        console.log(template)
     
         // On utlise langchain pour "brancher le LLM (chatBot) avec notre base de donnée vectorisée"
         Logger.log(" > Requetage de la base vectorielle via le LLM");
