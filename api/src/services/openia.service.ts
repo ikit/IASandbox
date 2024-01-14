@@ -29,13 +29,13 @@ export class OpenAIService {
         // On supprime la collection si elle existe déjà pour assurer que l'étape de création fonctionne
         const collections = await client.listCollections()
         const col = collections.find(c => c.name === dbName);
-        if (col && forceDbCreation) {
+        if (forceDbCreation) {
             Logger.log(" > Suppression de la base " + col.name);
             await client.deleteCollection({ name: col.name });
         }
         
         let collection = null;
-        if (forceDbCreation || !col)
+        if (!col)
         {
             Logger.log(" > Création de la base " + dbName);
             collection = await client.createCollection({ 

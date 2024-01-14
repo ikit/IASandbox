@@ -72,9 +72,9 @@ export class OllamaService {
             })
             // On y ajoute nos données persos
             Logger.log(" > Ajout des donnée à la base Chroma");
-            let count = 274;
+            let count = 562;
             // for (const doc of ragData) {
-            for (let docIdx=274; docIdx<ragData.length; docIdx+=1) {
+            for (let docIdx=562; docIdx<ragData.length; docIdx+=1) {
                 count += 1;
                 const doc = ragData[docIdx];
                 Logger.log(` > embedding document: ${count}/${ragData.length}`);
