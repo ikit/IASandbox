@@ -106,7 +106,7 @@ export class OllamaService {
     
         Logger.log(" > Retriever d'OpenIA");
         const vectorStore = await Chroma.fromExistingCollection(
-            new OllamaEmbeddings({ baseUrl: process.env.OLLAMA_PATH }),
+            new OllamaEmbeddings({ model: this.llm, baseUrl: process.env.OLLAMA_PATH }),
             { collectionName: chromaDb.name, url: process.env.CHROMADB_PATH },
         );
         // Logger.log("\n\n====\n\n", vectorStore.similaritySearch("Abeille", 2), "\n\n")
