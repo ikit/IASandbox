@@ -52,26 +52,26 @@ export class OllamaService {
         // On supprime la collection si elle existe déjà pour assurer que l'étape de création fonctionne
         const collections = await client.listCollections()
         const col = collections.find(c => c.name === dbName);
-        if (col && forceDbCreation) {
-            Logger.log(" > Suppression de la base " + col.name);
-            await client.deleteCollection({ name: col.name });
-        }
+        // if (col && forceDbCreation) {
+        //     Logger.log(" > Suppression de la base " + col.name);
+        //     await client.deleteCollection({ name: col.name });
+        // }
         
         let collection = null;
         if (forceDbCreation || !col)
         {
-            Logger.log(" > Création de la base " + dbName);
-            collection = await client.createCollection({ 
-                name: dbName,
-                embeddingFunction: new MyEmbeddingFunction(this.llm)
-            });
+            // Logger.log(" > Création de la base " + dbName);
+            // collection = await client.createCollection({ 
+            //     name: dbName,
+            //     embeddingFunction: new MyEmbeddingFunction(this.llm)
+            // });
             // On y ajoute nos données persos
             Logger.log(" > Ajout des donnée à la base Chroma");
-            let count = 0;
-            for (const doc of ragData) {
-            //for (let docIdx=828; docIdx<data.length; docIdx+=1) {
+            let count = 61;
+            // for (const doc of ragData) {
+            for (let docIdx=61; docIdx<ragData.length; docIdx+=1) {
                 count += 1;
-                // const doc = data[docIdx];
+                const doc = ragData[docIdx];
                 process.stdout.write(`\rEmbedding document: ${count}/${ragData.length}`);
                 await collection.add({
                     ids: doc.name,
