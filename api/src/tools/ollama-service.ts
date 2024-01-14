@@ -65,6 +65,11 @@ export class OllamaService {
             //     name: dbName,
             //     embeddingFunction: new MyEmbeddingFunction(this.llm)
             // });
+            Logger.log(" > Récupération de la base Chroma");
+            collection = await client.getCollection({
+                name: col.name,
+                embeddingFunction: new MyEmbeddingFunction(this.llm)
+            })
             // On y ajoute nos données persos
             Logger.log(" > Ajout des donnée à la base Chroma");
             let count = 61;
