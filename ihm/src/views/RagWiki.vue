@@ -135,7 +135,7 @@ export default defineComponent({
         this.loading = true;
         const llmMapping: any = {
           "Open AI": "openai",
-          "Mistral 7B": "mistral7b"
+          "Mistral 7B": "mistral"
         }
         axios.post(`/api/rag/${llmMapping[this.llm]}/chat-pzelda`, {
           question: this.question,
