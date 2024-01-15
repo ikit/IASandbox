@@ -56,9 +56,11 @@ export class RagOpenAIController {
     const duration = intervalToDuration({ start: 0, end: new Date().getTime() - start });
     Logger.log(`Traitement: ${formatDuration(duration)}`)
 
-    return {
+    const result = {
       answer: res.text,
       sources: res.sourceDocuments.map(s => s.metadata.source)
-    }
+    };
+    Logger.log(result)
+    return result;
   }
 }
